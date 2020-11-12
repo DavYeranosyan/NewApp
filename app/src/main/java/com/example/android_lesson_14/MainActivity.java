@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String title = String.valueOf(editText1.getText());
                 String description = String.valueOf(editText2.getText());
-                databaseReference = FirebaseDatabase.getInstance().getReference("books").push();
+                databaseReference = FirebaseDatabase.getInstance().getReference("Book").push();
                 Model model = new Model();
                 model.setId(databaseReference.getKey());
                 model.setTitle(title);
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void show() {
-        Query query = FirebaseDatabase.getInstance().getReference().child("books");
+        Query query = FirebaseDatabase.getInstance().getReference().child("Book");
         FirebaseRecyclerOptions<Model> options =
                 new FirebaseRecyclerOptions.Builder<Model>()
                         .setQuery(query, new SnapshotParser<Model>() {
@@ -89,20 +89,19 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onBindViewHolder(BaseAdapter holder, final int position, Model model) {
+            protected void onBindViewHolder(BaseAdapter holder, final int position, final Model model) {
                 holder.setDecs(model.getDesc());
                 holder.setTitle(model.getTitle());
 
-                holder.root.setOnClickListener(new View.OnClickListener() {
+                holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(com.example.android_lesson_14.MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                       FirebaseDatabase.getInstance().getReference().child("Book").child(model.getId()).removeValue();
                     }
                 });
             }
 
         };
-        Toast.makeText(com.example.android_lesson_14.MainActivity.this, ".valueOf(position)", Toast.LENGTH_SHORT).show();
         recyclerView.setAdapter(adapter);
     }
 
