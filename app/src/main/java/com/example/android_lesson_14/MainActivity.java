@@ -1,5 +1,6 @@
 package com.example.android_lesson_14;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private FirebaseRecyclerAdapter adapter;
     DatabaseReference databaseReference;
+    AlertDialog.Builder alertBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
-
+        alertBuilder = new AlertDialog.Builder(this);
         button = findViewById(R.id.button);
         Picasso.get()
                 .load("https://static.toiimg.com/photo/72975551.cms")
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String title = String.valueOf(editText1.getText());
                 String description = String.valueOf(editText2.getText());
-                databaseReference = FirebaseDatabase.getInstance().getReference("Book").push();
+                databaseReference = FirebaseDatabase.getInstance().getReference("book").push();
                 Model model = new Model();
                 model.setId(databaseReference.getKey());
                 model.setTitle(title);
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void show() {
-        Query query = FirebaseDatabase.getInstance().getReference().child("Book");
+        final Query query = FirebaseDatabase.getInstance().getReference().child("book");
         FirebaseRecyclerOptions<Model> options =
                 new FirebaseRecyclerOptions.Builder<Model>()
                         .setQuery(query, new SnapshotParser<Model>() {
@@ -96,7 +99,31 @@ public class MainActivity extends AppCompatActivity {
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                       FirebaseDatabase.getInstance().getReference().child("Book").child(model.getId()).removeValue();
+                       FirebaseDatabase.getInstance().getReference().child("book").child(model.getId()).removeValue();
+                    }
+                });
+                holder.edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        View view1 =getLayoutInflater().inflate( R.layout.alert, null);
+                        EditText editText1 = view1.findViewById(R.id.ed1);
+                        EditText editText2 = view1.findViewById(R.id.ed2);
+                        editText1.setText(model.getTitle());
+                        editText2.setText(model.getDesc());
+                        alertBuilder.setView(view1).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        }).setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
+                        AlertDialog alertDialog = alertBuilder.create();
+                        alertDialog.setTitle("Change My Date");
+                        alertDialog.show();
                     }
                 });
             }

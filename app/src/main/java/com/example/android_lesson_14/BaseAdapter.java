@@ -13,9 +13,10 @@ public class BaseAdapter extends RecyclerView.ViewHolder {
     private TextView  title;
     private TextView decs;
     public LinearLayout root;
-    public ImageButton delete;
+    public ImageButton delete, edit;
     public BaseAdapter(@NonNull View itemView) {
         super(itemView);
+        this.edit = itemView.findViewById(R.id.editBtn);
         this.delete = itemView.findViewById(R.id.deleteBtn);
         this.root = itemView.findViewById(R.id.liners);
         this.title = itemView.findViewById(R.id.text1);
