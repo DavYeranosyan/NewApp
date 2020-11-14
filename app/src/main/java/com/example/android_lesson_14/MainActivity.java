@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private FirebaseRecyclerAdapter adapter;
+
     DatabaseReference databaseReference;
     AlertDialog.Builder alertBuilder;
 
@@ -99,15 +100,15 @@ public class MainActivity extends AppCompatActivity {
                 holder.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                       FirebaseDatabase.getInstance().getReference().child("book").child(model.getId()).removeValue();
+                        FirebaseDatabase.getInstance().getReference().child("book").child(model.getId()).removeValue();
                     }
                 });
                 holder.edit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        View view1 =getLayoutInflater().inflate( R.layout.alert, null);
-                        EditText editText1 = view1.findViewById(R.id.ed1);
-                        EditText editText2 = view1.findViewById(R.id.ed2);
+                        View view1 = getLayoutInflater().inflate(R.layout.alert, null);
+                        final EditText editText1 = view1.findViewById(R.id.ed1);
+                        final EditText editText2 = view1.findViewById(R.id.ed2);
                         editText1.setText(model.getTitle());
                         editText2.setText(model.getDesc());
                         alertBuilder.setView(view1).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                         }).setPositiveButton("Save", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                FirebaseDatabase.getInstance().getReference().child("book").child(model.getId()).setValue(new Model(model.getId(), editText1.getText().toString(), editText2.getText().toString()));
                                 dialogInterface.cancel();
                             }
                         });
