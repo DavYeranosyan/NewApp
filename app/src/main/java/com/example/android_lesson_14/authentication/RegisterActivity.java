@@ -49,12 +49,14 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Werryyy Gooood", Toast.LENGTH_LONG).show();
                         String nameF = name.getText().toString();
                         String surnameF = surname.getText().toString();
+                        String emailF = email.getText().toString();
                         String ageF = age.getText().toString();
                         databaseReference  = FirebaseDatabase.getInstance().getReference("book").push();
                         Model model = new Model();
                         model.setId(databaseReference.getKey());
                         model.setName(nameF);
                         model.setSurname(surnameF);
+                        model.setEmail(emailF);
                         model.setAge(Integer.parseInt(ageF));
                         databaseReference.setValue(model);
                     }
