@@ -72,4 +72,6 @@
         android:onClick="goMyNewAcc"
         android:text="Go To My New Account"
         android:textColor="#000000" />
+
+
 </LinearLayout>

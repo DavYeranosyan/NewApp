@@ -36,7 +36,11 @@ public class LoginActivity extends AppCompatActivity {
                     if (!task.isSuccessful()) {
                         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
                     }else {
-                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                        if(firebaseAuth.getCurrentUser().isEmailVerified()){
+                            startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                        }else{
+                            Toast.makeText(getApplicationContext(), "Email is invalid verified", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             });
@@ -47,5 +51,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signUp(View view) {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+    }
+
+    public void inClickForget(View view) {
+        startActivity(new Intent(LoginActivity.this, ForGetPasswordActivity.class));
     }
 }

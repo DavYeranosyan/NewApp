@@ -46,19 +46,28 @@ public class RegisterActivity extends AppCompatActivity {
                     if (!task.isSuccessful()) {
                         Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Werryyy Gooood", Toast.LENGTH_LONG).show();
-                        String nameF = name.getText().toString();
-                        String surnameF = surname.getText().toString();
-                        String emailF = email.getText().toString();
-                        String ageF = age.getText().toString();
-                        databaseReference  = FirebaseDatabase.getInstance().getReference("book").push();
-                        Model model = new Model();
-                        model.setId(databaseReference.getKey());
-                        model.setName(nameF);
-                        model.setSurname(surnameF);
-                        model.setEmail(emailF);
-                        model.setAge(Integer.parseInt(ageF));
-                        databaseReference.setValue(model);
+                        firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(getApplicationContext(), "Werryyy Gooood", Toast.LENGTH_LONG).show();
+                                    String nameF = name.getText().toString();
+                                    String surnameF = surname.getText().toString();
+                                    String emailF = email.getText().toString();
+                                    String ageF = age.getText().toString();
+                                    databaseReference  = FirebaseDatabase.getInstance().getReference("book").push();
+                                    Model model = new Model();
+                                    model.setId(databaseReference.getKey());
+                                    model.setName(nameF);
+                                    model.setSurname(surnameF);
+                                    model.setEmail(emailF);
+                                    model.setAge(Integer.parseInt(ageF));
+                                    databaseReference.setValue(model);
+                                }else {
+                                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
                     }
                 }
             });
