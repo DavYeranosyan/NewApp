@@ -1,6 +1,5 @@
 package com.example.android_lesson_14.authentication;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
